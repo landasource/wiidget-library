@@ -1,0 +1,66 @@
+
+import com.landasource.wiidget.library.template.Template;
+import com.landasource.wiidget.library.template.Part;
+import com.landasource.wiidget.library.template.SimplePart;
+import com.landasource.wiidget.library.template.Placeholder;
+
+import com.landasource.wiidget.basewiidgets.Out;
+import com.landasource.wiidget.library.html.Label;
+import com.landasource.wiidget.library.html.CssFile;
+import com.landasource.wiidget.library.html.JavaScriptFile;
+
+
+import com.landasource.wiidget.library.html.base.Div;
+import com.landasource.wiidget.library.html.base.Ul;
+import com.landasource.wiidget.library.html.base.Li;
+import com.landasource.wiidget.library.html.base.Link;
+import com.landasource.wiidget.library.html.base.Heading;
+
+import com.landasource.wiidget.library.html.datatable.PageableDataTable;
+
+import com.landasource.wiidget.library.html.datatable.LinkPaginator;
+
+import com.landasource.wiidget.library.html.table.Column;
+import com.landasource.wiidget.library.util.LoopHelper;
+
+
+$loopHelper : LoopHelper;
+
+// link paginator template
+Div(id = this.id, cssClass = this.cssClass){
+
+	Ul(cssClass = this.listCssClass){
+		
+		// prev page
+		Li(cssClass = this.currentPage == 1 ? "disabled" : ""){
+			Link(rendered = this.currentPage != 1, href = ("?" + this.clientPageVar + "=" + (this.currentPage - 1))){
+				Out(this.prevPageLabel);
+			}
+			
+			Link(rendered = (this.currentPage <= 1), href = "#"){
+				Out(this.prevPageLabel);
+			}
+		}	
+		
+		// inner pages
+		foreach(page : $loopHelper.loop(1, this.pageCount, 1)){
+			
+			Li(cssClass = page == this.currentPage ? "active" : ""){
+				Link(href = ("?" + this.clientPageVar + "=" + page)){
+					Out(page);
+				}
+			}			
+		}
+		
+		// next page
+		Li(cssClass = this.currentPage == this.pageCount ? "disabled" : ""){
+			Link(rendered = this.currentPage < this.pageCount, href = ("?" + this.clientPageVar + "=" + (this.currentPage + 1))){
+				Out(this.nextPageLabel);
+			}
+			
+			Link(rendered = (this.currentPage == this.pageCount), href = ""){
+				Out(this.nextPageLabel);
+			}
+		}
+	}	
+}
