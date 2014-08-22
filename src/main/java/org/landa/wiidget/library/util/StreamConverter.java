@@ -8,11 +8,16 @@ import java.util.Scanner;
  */
 public class StreamConverter {
 
-	public static String toString(final InputStream inputStream) {
+    public static String toString(final InputStream inputStream) {
 
-		final String inputStreamString = new Scanner(inputStream, "UTF-8").useDelimiter("\\A").next();
+        // TODO support other encodings
+        final Scanner scanner = new Scanner(inputStream, "UTF-8");
 
-		return inputStreamString;
-	}
+        final String inputStreamString = scanner.useDelimiter("\\A").next();
+
+        scanner.close();
+
+        return inputStreamString;
+    }
 
 }

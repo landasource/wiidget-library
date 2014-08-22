@@ -8,45 +8,45 @@ import org.landa.wiidget.library.html.table.Table;
  */
 public class PageableDataTable extends Table {
 
-	private Paginator paginator;
+    private Paginator paginator;
 
-	private Pageable pageable;
+    private Pageable<?> pageable;
 
-	@Override
-	public void init() {
-		super.init();
+    @Override
+    public void init() {
+        super.init();
 
-		if (getValue() instanceof Pageable == false) {
-			throw new WiidgetException("Value must be pageable");
-		}
+        if (getValue() instanceof Pageable == false) {
+            throw new WiidgetException("Value must be pageable");
+        }
 
-		this.pageable = (Pageable) super.getValue();
-	}
+        this.pageable = (Pageable<?>) super.getValue();
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		setValue(pageable.getPage(getCurrentPage()));
+        setValue(pageable.getPage(getCurrentPage()));
 
-		super.run();
-	}
+        super.run();
+    }
 
-	public int getDataSize() {
-		return pageable.size();
-	}
+    public int getDataSize() {
+        return pageable.size();
+    }
 
-	protected int getCurrentPage() {
+    protected int getCurrentPage() {
 
-		this.paginator = getChild(Paginator.class);
+        this.paginator = getChild(Paginator.class);
 
-		if (null == paginator) {
-			return 1;
-		}
-		return paginator.getCurrentPage();
-	}
+        if (null == paginator) {
+            return 1;
+        }
+        return paginator.getCurrentPage();
+    }
 
-	public Pageable getPageable() {
-		return pageable;
-	}
+    public Pageable<?> getPageable() {
+        return pageable;
+    }
 
 }
