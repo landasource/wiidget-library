@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.landasource.wiidget.WiidgetException;
 import com.landasource.wiidget.antlr.WiidgetLexerException;
-import com.landasource.wiidget.basewiidgets.WiidgetLangCompiler;
+import com.landasource.wiidget.basewiidgets.WiidgetTemplate;
 import com.landasource.wiidget.io.StringTemplate;
 import com.landasource.wiidget.library.BaseTagWiidget;
 import com.landasource.wiidget.library.template.Part;
@@ -107,7 +107,7 @@ public abstract class TemplatedHtmlWiidget extends BaseTagWiidget {
 			startBuffer();
 
 			try {
-				wiidget(WiidgetLangCompiler.class, data().set("value", fileContent));
+				wiidget(WiidgetTemplate.class, data().set("value", fileContent));
 			} catch (final WiidgetLexerException exception) {
 				throw new WiidgetException("Failed to render file: " + fileName, exception);
 			}
