@@ -5,39 +5,22 @@ import java.util.Collection;
 
 public class ArrayListPageable<E> extends ArrayList<E> implements Pageable<E> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -9131442573060608098L;
+    private static final long serialVersionUID = -9131442573060608098L;
 
-	private int pageSize;
+    public ArrayListPageable(final Collection<E> list) {
+        super(list);
+    }
 
-	public ArrayListPageable(final Collection<E> list) {
-		this(list, 10);
-	}
+    @Override
+    public Collection<E> getPage(final int currentPage, final int pageSize) {
 
-	public ArrayListPageable(final Collection<E> list, final int pageSize) {
-		super(list);
-		this.pageSize = pageSize;
-	}
+        final int fromItem = pageSize * (currentPage - 1);
+        final int toItem = pageSize * currentPage;
 
-	@Override
-	public Collection<E> getPage(final int currentPage) {
-
-		final int pageSize = getPageSize();
-
-		final int fromItem = pageSize * (currentPage - 1);
-		final int toItem = pageSize * currentPage;
-
-		if (this.size() < toItem) {
-			return this;
-		}
-		return this.subList(fromItem, toItem);
-	}
-
-	@Override
-	public int getPageSize() {
-		return pageSize;
-	}
+        if (this.size() < toItem) {
+            return this;
+        }
+        return this.subList(fromItem, toItem);
+    }
 
 }

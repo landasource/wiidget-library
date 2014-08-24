@@ -28,8 +28,7 @@ public class LinkPaginator extends TemplatedHtmlWiidget implements Paginator {
 
     private boolean useAjax = false;
 
-    @Required
-    private int itemsPerPage = 5;
+    private int pageSize = 10;
 
     public PageableDataTable getDataTable() {
         return dataTable;
@@ -56,7 +55,7 @@ public class LinkPaginator extends TemplatedHtmlWiidget implements Paginator {
     public int getPageCount() {
         final int listSize = getDataTable().getDataSize();
 
-        return (int) Math.ceil(listSize / getItemsPerPage());
+        return (int) Math.ceil(listSize / getPageSize());
     }
 
     public void setPageVar(final String pageVar) {
@@ -70,14 +69,6 @@ public class LinkPaginator extends TemplatedHtmlWiidget implements Paginator {
 
     public String getPageVar() {
         return pageVar;
-    }
-
-    public int getItemsPerPage() {
-        return getDataTable().getPageable().getPageSize();
-    }
-
-    public void setItemsPerPage(final int itemsPerPage) {
-        this.itemsPerPage = itemsPerPage;
     }
 
     public String getListCssClass() {
@@ -132,6 +123,22 @@ public class LinkPaginator extends TemplatedHtmlWiidget implements Paginator {
      */
     public void setUseAjax(final boolean useAjax) {
         this.useAjax = useAjax;
+    }
+
+    /**
+     * @return the pageSize
+     */
+    @Override
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    /**
+     * @param pageSize
+     *            the pageSize to set
+     */
+    public void setPageSize(final int pageSize) {
+        this.pageSize = pageSize;
     }
 
 }
