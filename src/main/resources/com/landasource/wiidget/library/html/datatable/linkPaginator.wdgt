@@ -28,7 +28,7 @@ import com.landasource.wiidget.commons.Include as include;
 $loopHelper : LoopHelper;
 
 // link paginator template
-Div(id = this.id, cssClass = this.cssClass){
+Div(id = this.id, cssClass = this.cssClass + (this.useAjax ? " ajax-link-paginator" : "")){
 
 	Ul(cssClass = this.listCssClass){
 		
@@ -65,14 +65,3 @@ Div(id = this.id, cssClass = this.cssClass){
 		}
 	}	
 }
-
-// support ajax
-if(this.useAjax){
-	
-	"script"(type = "application/javascript"){
-		include("/com/landasource/wiidget/library/html/datatable/linkPaginatorAjaxScript.js");
-	}
-	
-
-}
-
