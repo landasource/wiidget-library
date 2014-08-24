@@ -4,7 +4,7 @@ import com.landasource.wiidget.library.template.Part;
 import com.landasource.wiidget.library.template.SimplePart;
 import com.landasource.wiidget.library.template.Placeholder;
 
-import com.landasource.wiidget.basewiidgets.Out;
+import com.landasource.wiidget.commons.Out;
 import com.landasource.wiidget.library.html.Label;
 import com.landasource.wiidget.library.html.CssFile;
 import com.landasource.wiidget.library.html.JavaScriptFile;
@@ -22,6 +22,7 @@ import com.landasource.wiidget.library.html.datatable.LinkPaginator;
 
 import com.landasource.wiidget.library.html.table.Column;
 import com.landasource.wiidget.library.util.LoopHelper;
+import com.landasource.wiidget.commons.Include as include;
 
 
 $loopHelper : LoopHelper;
@@ -64,3 +65,14 @@ Div(id = this.id, cssClass = this.cssClass){
 		}
 	}	
 }
+
+// support ajax
+if(this.useAjax){
+	
+	"script"(type = "application/javascript"){
+		include("/com/landasource/wiidget/library/html/datatable/linkPaginatorAjaxScript.js");
+	}
+	
+
+}
+

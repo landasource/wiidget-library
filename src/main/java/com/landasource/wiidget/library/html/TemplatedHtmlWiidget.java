@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.landasource.wiidget.WiidgetException;
 import com.landasource.wiidget.antlr.WiidgetLexerException;
-import com.landasource.wiidget.basewiidgets.WiidgetTemplate;
+import com.landasource.wiidget.commons.WiidgetTemplate;
 import com.landasource.wiidget.io.StringTemplate;
 import com.landasource.wiidget.library.BaseTagWiidget;
 import com.landasource.wiidget.library.template.Part;
