@@ -4,7 +4,7 @@
 
 	<groupId>com.landasource</groupId>
 	<artifactId>wiidget-library</artifactId>
-	<version>0.1.1</version>
+	<version>0.1.2</version>
 	<packaging>jar</packaging>
 
 	<name>wiidget-library</name>
@@ -35,6 +35,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<wiidget.version>0.1.2</wiidget.version>
 	</properties>
 
 	<build>
@@ -87,7 +88,7 @@
 		<dependency>
 			<groupId>com.landasource</groupId>
 			<artifactId>wiidget</artifactId>
-			<version>0.1.1</version>
+			<version>${wiidget.version}</version>
 		</dependency>
 	</dependencies>
 
