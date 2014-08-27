@@ -13,12 +13,12 @@ public class LinkPaginator extends TemplatedHtmlWiidget implements Paginator {
     @DefaultField
     private PageableDataTable dataTable;
 
-    private String cssClass = "pagination";
+    private String cssClass;
 
     @Required
     private String pageVar = "page";
 
-    private String listCssClass = "paginator-list";
+    private String listCssClass = "pagination";
 
     private final String itemCssClass = "item";
 

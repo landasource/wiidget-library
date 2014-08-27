@@ -28,39 +28,39 @@ import com.landasource.wiidget.commons.Include as include;
 $loopHelper : LoopHelper;
 
 // link paginator template
-Div(id = this.id, cssClass = this.cssClass + (this.useAjax ? " ajax-link-paginator" : "")){
+"div"(id = this.id, cssClass = this.cssClass + (this.useAjax ? " ajax-link-paginator" : "")){
 
-	Ul(cssClass = this.listCssClass){
+	"ul"(class = this.listCssClass){
 		
 		// prev page
-		Li(cssClass = this.currentPage == 1 ? "disabled" : ""){
+		"li"(Link = this.currentPage == 1 ? "disabled" : ""){
 			Link(rendered = this.currentPage != 1, href = ("?" + this.clientPageVar + "=" + (this.currentPage - 1))){
-				Out(this.prevPageLabel);
+				`this.prevPageLabel`;
 			}
 			
 			Link(rendered = (this.currentPage <= 1), href = "#"){
-				Out(this.prevPageLabel);
+				`this.prevPageLabel`;
 			}
 		}	
 		
 		// inner pages
 		foreach(page : $loopHelper.loop(1, this.pageCount, 1)){
 			
-			Li(cssClass = page == this.currentPage ? "active" : ""){
+			"li"(class = page == this.currentPage ? "active" : ""){
 				Link(href = ("?" + this.clientPageVar + "=" + page)){
-					Out(page);
+					`"" + page`;
 				}
 			}			
 		}
 		
 		// next page
-		Li(cssClass = this.currentPage == this.pageCount ? "disabled" : ""){
+		"li"(class = this.currentPage == this.pageCount ? "disabled" : ""){
 			Link(rendered = this.currentPage < this.pageCount, href = ("?" + this.clientPageVar + "=" + (this.currentPage + 1))){
-				Out(this.nextPageLabel);
+				`this.nextPageLabel`;
 			}
 			
 			Link(rendered = (this.currentPage == this.pageCount), href = ""){
-				Out(this.nextPageLabel);
+				`this.nextPageLabel`;
 			}
 		}
 	}	
