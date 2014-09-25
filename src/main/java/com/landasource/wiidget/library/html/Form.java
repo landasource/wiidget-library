@@ -48,12 +48,12 @@ public class Form extends HtmlTagWiidget {
 	}
 
 	public Input input() {
-		return this.getWiidgetFactory().createWiidget(Input.class);
+		return this.getEngine().createWiidget(Input.class);
 	}
 
 	public Table table() {
 
-		final Table table = this.getWiidgetFactory().createWiidget(
+		final Table table = this.getEngine().createWiidget(
 				Table.class);
 
 		return table;

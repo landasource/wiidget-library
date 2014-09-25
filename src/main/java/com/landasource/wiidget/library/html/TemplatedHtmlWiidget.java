@@ -34,7 +34,7 @@ public abstract class TemplatedHtmlWiidget extends BaseTagWiidget {
 	public void init() {
 
 		// bind this wiidget to context
-		getWiidgetFactory().getWiidgetContext().set(THIS_VAR, this);
+		getEngine().getWiidgetContext().set(THIS_VAR, this);
 
 		startBuffer();
 	}
@@ -51,7 +51,7 @@ public abstract class TemplatedHtmlWiidget extends BaseTagWiidget {
 
 		write(content);
 
-		getWiidgetFactory().getWiidgetContext().remove(THIS_VAR);
+		getEngine().getWiidgetContext().remove(THIS_VAR);
 
 	}
 
@@ -79,13 +79,13 @@ public abstract class TemplatedHtmlWiidget extends BaseTagWiidget {
 
 		final String packaged = '/' + getClass().getPackage().getName().replaceAll("\\.", "/") + '/' + simpleName;
 
-		final String wiidgetExtension = getWiidgetFactory().getWiidgetProperties().getString(WiidgetProperties.WIIDGET_FILE_EXTENSION);
+		final String wiidgetExtension = getEngine().getWiidgetProperties().getString(WiidgetProperties.WIIDGET_FILE_EXTENSION);
 
 		// check wiidget template
 		final InputStream template = getClass().getResourceAsStream(simpleName + wiidgetExtension);
 
 		if (null == template) {
-			final String extension = getWiidgetFactory().getWiidgetProperties().getDefault("wiidget.template.extension", ".wdgt");
+			final String extension = getEngine().getWiidgetProperties().getDefault("wiidget.template.extension", ".wdgt");
 			return packaged + extension;
 		}
 
@@ -121,7 +121,7 @@ public abstract class TemplatedHtmlWiidget extends BaseTagWiidget {
 
 	protected boolean isCompilableTemplate(final String fileName) {
 
-		final WiidgetProperties properties = getWiidgetFactory().getWiidgetProperties();
+		final WiidgetProperties properties = getEngine().getWiidgetProperties();
 
 		final String fileSuffix = properties.getString(WiidgetProperties.WIIDGET_FILE_EXTENSION);
 

@@ -42,7 +42,7 @@ public class LinkPaginator extends TemplatedHtmlWiidget implements Paginator {
     public int getCurrentPage() {
         final String clientPageVar = getClientPageVar();
 
-        final Object pageObj = getWiidgetFactory().getWiidgetContext().get(clientPageVar);
+        final Object pageObj = getEngine().getWiidgetContext().get(clientPageVar);
         if (null == pageObj) {
             return 1;
         } else {
