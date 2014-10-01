@@ -12,7 +12,7 @@ import com.landasource.wiidget.io.StringTemplate;
 import com.landasource.wiidget.library.BaseTagWiidget;
 import com.landasource.wiidget.library.template.Part;
 import com.landasource.wiidget.util.DataMap;
-import com.landasource.wiidget.util.WiidgetProperties;
+import com.landasource.wiidget.util.Properties;
 
 /**
  * The wiidgets extend this class have an template file. By default this file is
@@ -34,7 +34,7 @@ public abstract class TemplatedHtmlWiidget extends BaseTagWiidget {
 	public void init() {
 
 		// bind this wiidget to context
-		getEngine().getWiidgetContext().set(THIS_VAR, this);
+		getEngine().getContext().set(THIS_VAR, this);
 
 		startBuffer();
 	}
@@ -51,7 +51,7 @@ public abstract class TemplatedHtmlWiidget extends BaseTagWiidget {
 
 		write(content);
 
-		getEngine().getWiidgetContext().remove(THIS_VAR);
+		getEngine().getContext().remove(THIS_VAR);
 
 	}
 
@@ -79,13 +79,13 @@ public abstract class TemplatedHtmlWiidget extends BaseTagWiidget {
 
 		final String packaged = '/' + getClass().getPackage().getName().replaceAll("\\.", "/") + '/' + simpleName;
 
-		final String wiidgetExtension = getEngine().getWiidgetProperties().getString(WiidgetProperties.WIIDGET_FILE_EXTENSION);
+		final String wiidgetExtension = getEngine().getProperties().getString(Properties.WIIDGET_FILE_EXTENSION);
 
 		// check wiidget template
 		final InputStream template = getClass().getResourceAsStream(simpleName + wiidgetExtension);
 
 		if (null == template) {
-			final String extension = getEngine().getWiidgetProperties().getDefault("wiidget.template.extension", ".wdgt");
+			final String extension = getEngine().getProperties().getDefault("wiidget.template.extension", ".wdgt");
 			return packaged + extension;
 		}
 
@@ -121,9 +121,9 @@ public abstract class TemplatedHtmlWiidget extends BaseTagWiidget {
 
 	protected boolean isCompilableTemplate(final String fileName) {
 
-		final WiidgetProperties properties = getEngine().getWiidgetProperties();
+		final Properties properties = getEngine().getProperties();
 
-		final String fileSuffix = properties.getString(WiidgetProperties.WIIDGET_FILE_EXTENSION);
+		final String fileSuffix = properties.getString(Properties.WIIDGET_FILE_EXTENSION);
 
 		return fileName.endsWith(fileSuffix);
 	}
