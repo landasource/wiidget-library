@@ -4,9 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.landasource.wiidget.Tag;
-import com.landasource.wiidget.validator.Required;
-
 import com.landasource.wiidget.library.html.HtmlTagWiidget;
+import com.landasource.wiidget.validator.Required;
 
 public class Table extends HtmlTagWiidget {
 
@@ -22,7 +21,8 @@ public class Table extends HtmlTagWiidget {
 	@Override
 	public void run() {
 
-		write(endBuffer());
+		final String buffer = endBuffer();
+		write(buffer);
 
 		write(Tag.open("table", getAttributeMap()));
 
