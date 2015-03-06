@@ -10,9 +10,10 @@ import com.landasource.wiidget.WiidgetException;
 import com.landasource.wiidget.antlr.WiidgetLexerException;
 import com.landasource.wiidget.commons.WiidgetTemplate;
 import com.landasource.wiidget.context.Context;
-import com.landasource.wiidget.io.StringTemplate;
 import com.landasource.wiidget.library.BaseTagWiidget;
 import com.landasource.wiidget.library.template.Part;
+import com.landasource.wiidget.parser.ParserException;
+import com.landasource.wiidget.parser.SingleExpressionEvaluator;
 import com.landasource.wiidget.util.DataMap;
 import com.landasource.wiidget.util.Properties;
 
@@ -27,165 +28,174 @@ import com.landasource.wiidget.util.Properties;
  */
 public abstract class TemplatedHtmlWiidget extends BaseTagWiidget {
 
-	/**
-	 * Keyword to attach the current wiidget.
-	 */
-	public static final String THIS_VAR = "this";
+    /**
+     * Keyword to attach the current wiidget.
+     */
+    public static final String THIS_VAR = "this";
 
-	/**
-	 * Set only when this wiidget is nested.
-	 */
-	private Wiidget parent;
+    /**
+     * Set only when this wiidget is nested.
+     */
+    private Wiidget parent;
 
-	private Boolean removePlaceholders = true;
+    private Boolean removePlaceholders = true;
 
-	@Override
-	public void init() {
+    @Override
+    public void init() {
 
-		// bind this wiidget to context
-		final Context context = getEngine().getContext();
+        // bind this wiidget to context
+        final Context context = getEngine().getContext();
 
-		if (context.isSet(THIS_VAR)) {
-			parent = (Wiidget) context.get(THIS_VAR);
-		}
+        if (context.isSet(THIS_VAR)) {
+            parent = (Wiidget) context.get(THIS_VAR);
+        }
 
-		context.set(THIS_VAR, this);
+        context.set(THIS_VAR, this);
 
-		startBuffer();
-	}
+        startBuffer();
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		endBuffer();
+        endBuffer();
 
-		final String fileContent = getTemplateContent();
-		final DataMap partMap = getPartMap();
+        final String fileContent = getTemplateContent();
+        final DataMap partMap = getPartMap();
 
-		final String content = replacePlaceholders(fileContent, partMap);
+        final String content = replacePlaceholders(fileContent, partMap);
 
-		write(content);
+        write(content);
 
-		getEngine().getContext().remove(THIS_VAR);
+        getEngine().getContext().remove(THIS_VAR);
 
-		if (null != parent) { // set back parent
-			getEngine().getContext().set(THIS_VAR, parent);
-		}
+        if (null != parent) { // set back parent
+            getEngine().getContext().set(THIS_VAR, parent);
+        }
 
-	}
+    }
 
-	/**
-	 * Replaces placeholders.
-	 *
-	 * @param content
-	 * @param data
-	 * @return
-	 */
-	protected String replacePlaceholders(final String content, final DataMap data) {
+    /**
+     * Replaces placeholders.
+     *
+     * @param content
+     * @param data
+     * @return
+     */
+    protected String replacePlaceholders(final String content, final DataMap data) {
 
-		final DataMap mergedContext = new DataMap(getEngine().getContext().getAll());
-		mergedContext.setAll(data);
+        // final DataMap mergedContext = new
+        // DataMap(getEngine().getContext().getAll());
+        // mergedContext.setAll(data);
+        //
+        // final StringTemplate stringTemplate = new StringTemplate(content,
+        // this.getRemovePlaceholders());
+        // return stringTemplate.render(mergedContext);
 
-		final StringTemplate stringTemplate = new StringTemplate(content, this.getRemovePlaceholders());
-		return stringTemplate.render(mergedContext);
-	}
+        final SingleExpressionEvaluator expressionEvaluator = new SingleExpressionEvaluator(getEngine());
+        try {
+            return expressionEvaluator.replaceExpressions(content);
+        } catch (final ParserException e) {
+            throw new WiidgetException("Illegal expression in template", e);
+        }
+    }
 
-	/**
-	 * The template name by default is: '{class simple name}.wdgt'.
-	 *
-	 * @return template file name
-	 */
-	protected String getTemplateName() {
+    /**
+     * The template name by default is: '{class simple name}.wdgt'.
+     *
+     * @return template file name
+     */
+    protected String getTemplateName() {
 
-		final String simpleName = StringUtils.uncapitalize(getClass().getSimpleName());
+        final String simpleName = StringUtils.uncapitalize(getClass().getSimpleName());
 
-		final String packaged = '/' + getClass().getPackage().getName().replaceAll("\\.", "/") + '/' + simpleName;
+        final String packaged = '/' + getClass().getPackage().getName().replaceAll("\\.", "/") + '/' + simpleName;
 
-		final String wiidgetExtension = getEngine().getProperties().getString(Properties.WIIDGET_FILE_EXTENSION);
+        final String wiidgetExtension = getEngine().getProperties().getString(Properties.WIIDGET_FILE_EXTENSION);
 
-		// check wiidget template
-		final InputStream template = getClass().getResourceAsStream(simpleName + wiidgetExtension);
+        // check wiidget template
+        final InputStream template = getClass().getResourceAsStream(simpleName + wiidgetExtension);
 
-		if (null == template) {
-			final String extension = getEngine().getProperties().getDefault("wiidget.template.extension", ".wdgt");
-			return packaged + extension;
-		}
+        if (null == template) {
+            final String extension = getEngine().getProperties().getDefault("wiidget.template.extension", ".wdgt");
+            return packaged + extension;
+        }
 
-		return packaged + wiidgetExtension;
-	}
+        return packaged + wiidgetExtension;
+    }
 
-	/**
-	 * String content of template.
-	 *
-	 * @return content
-	 */
+    /**
+     * String content of template.
+     *
+     * @return content
+     */
 
-	protected String getTemplateContent() {
+    protected String getTemplateContent() {
 
-		final String fileName = getTemplateName();
-		final String fileContent = getFileContent(fileName);
+        final String fileName = getTemplateName();
+        final String fileContent = getFileContent(fileName);
 
-		if (isCompilableTemplate(fileName)) {
-			startBuffer();
+        if (isCompilableTemplate(fileName)) {
+            startBuffer();
 
-			try {
-				wiidget(WiidgetTemplate.class, data().set("value", fileContent));
-			} catch (final WiidgetLexerException exception) {
-				throw new WiidgetException("Failed to render file: " + fileName, exception);
-			}
+            try {
+                wiidget(WiidgetTemplate.class, data().set("value", fileContent));
+            } catch (final WiidgetLexerException exception) {
+                throw new WiidgetException("Failed to render file: " + fileName, exception);
+            }
 
-			final String compileResult = endBuffer(); // get compile result
-			return compileResult;
+            final String compileResult = endBuffer(); // get compile result
+            return compileResult;
 
-		}
-		return fileContent;
-	}
+        }
+        return fileContent;
+    }
 
-	protected boolean isCompilableTemplate(final String fileName) {
+    protected boolean isCompilableTemplate(final String fileName) {
 
-		final Properties properties = getEngine().getProperties();
+        final Properties properties = getEngine().getProperties();
 
-		final String fileSuffix = properties.getString(Properties.WIIDGET_FILE_EXTENSION);
+        final String fileSuffix = properties.getString(Properties.WIIDGET_FILE_EXTENSION);
 
-		return fileName.endsWith(fileSuffix);
-	}
+        return fileName.endsWith(fileSuffix);
+    }
 
-	/**
-	 * @return
-	 */
-	protected DataMap getPartMap() {
+    /**
+     * @return
+     */
+    protected DataMap getPartMap() {
 
-		final List<Part> partList = getChildren(Part.class);
+        final List<Part> partList = getChildren(Part.class);
 
-		final DataMap partMap = new DataMap();
+        final DataMap partMap = new DataMap();
 
-		for (final Part part : partList) {
+        for (final Part part : partList) {
 
-			final String name = part.getName();
-			final String content = part.getContent();
+            final String name = part.getName();
+            final String content = part.getContent();
 
-			partMap.put(name, content);
-		}
-		return partMap;
-	}
+            partMap.put(name, content);
+        }
+        return partMap;
+    }
 
-	/**
-	 * @return the removePlaceholders
-	 */
-	public Boolean getRemovePlaceholders() {
-		return removePlaceholders;
-	}
+    /**
+     * @return the removePlaceholders
+     */
+    public Boolean getRemovePlaceholders() {
+        return removePlaceholders;
+    }
 
-	/**
-	 * @param removePlaceholders
-	 *           the removePlaceholders to set
-	 */
-	public void setRemovePlaceholders(final Boolean removePlaceholders) {
-		this.removePlaceholders = removePlaceholders;
-	}
+    /**
+     * @param removePlaceholders
+     *            the removePlaceholders to set
+     */
+    public void setRemovePlaceholders(final Boolean removePlaceholders) {
+        this.removePlaceholders = removePlaceholders;
+    }
 
-	public Wiidget getParent() {
-		return parent;
-	}
+    public Wiidget getParent() {
+        return parent;
+    }
 
 }
