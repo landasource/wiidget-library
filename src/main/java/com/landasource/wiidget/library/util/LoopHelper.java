@@ -5,16 +5,19 @@ import java.util.List;
 
 import com.landasource.wiidget.Wiidget;
 
+/**
+ * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
+ */
 public class LoopHelper extends Wiidget {
 
-	public List<Integer> loop(final int from, final int to, final int step) {
+    public List<Integer> loop(final int from, final int to, final int step) {
 
-		final List<Integer> list = new LinkedList<>();
+        final List<Integer> list = new LinkedList<>();
 
-		for (int i = from; i <= to; i += step) {
-			list.add(i);
-		}
-		return list;
-	}
+        for (int i = from; i <= to; i += step) {
+            list.add(i);
+        }
+        return list;
+    }
 
 }

@@ -1,124 +1,144 @@
 package com.landasource.wiidget.library.html.datatable;
 
 import com.landasource.wiidget.annotation.DefaultField;
+import com.landasource.wiidget.library.html.TemplatedHtmlWiidget;
 import com.landasource.wiidget.validator.Required;
 
-import com.landasource.wiidget.library.html.TemplatedHtmlWiidget;
-
 /**
- * 
  * @author Zsolt Lengyel (zsolt.lengyel.it@gmail.com)
- * 
  */
 public class LinkPaginator extends TemplatedHtmlWiidget implements Paginator {
 
-	@Required
-	@DefaultField
-	private PageableDataTable dataTable;
+    @Required
+    @DefaultField
+    private PageableDataTable dataTable;
 
-	private String cssClass = "pagination";
+    private String cssClass;
 
-	@Required
-	private String pageVar = "page";
+    @Required
+    private String pageVar = "page";
 
-	private String listCssClass = "paginator-list";
+    private String listCssClass = "pagination";
 
-	private final String itemCssClass = "item";
+    private final String itemCssClass = "item";
 
-	private String prevPageLabel = "&laquo;";
+    private String prevPageLabel = "&laquo;";
 
-	private String nextPageLabel = "&raquo;";
+    private String nextPageLabel = "&raquo;";
 
-	@Required
-	private int itemsPerPage = 5;
+    private boolean useAjax = false;
 
-	public PageableDataTable getDataTable() {
-		return dataTable;
-	}
+    private int pageSize = 10;
 
-	public void setDataTable(final PageableDataTable dataTable) {
-		this.dataTable = dataTable;
-	}
+    public PageableDataTable getDataTable() {
+        return dataTable;
+    }
 
-	@Override
-	public int getCurrentPage() {
-		final String clientPageVar = getClientPageVar();
+    public void setDataTable(final PageableDataTable dataTable) {
+        this.dataTable = dataTable;
+    }
 
-		final Object pageObj = getWiidgetFactory().getWiidgetContext().get(
-				clientPageVar);
-		if (null == pageObj) {
-			return 1;
-		} else {
+    @Override
+    public int getCurrentPage() {
+        final String clientPageVar = getClientPageVar();
 
-			return Integer.parseInt(pageObj.toString());
-		}
-	}
+        final Object pageObj = getEngine().getContext().get(clientPageVar);
+        if (null == pageObj) {
+            return 1;
+        } else {
 
-	@Override
-	public int getPageCount() {
-		final int listSize = getDataTable().getDataSize();
+            return Integer.parseInt(pageObj.toString());
+        }
+    }
 
-		return (int) Math.ceil(listSize / getItemsPerPage());
-	}
+    @Override
+    public int getPageCount() {
+        final int listSize = getDataTable().getDataSize();
 
-	public void setPageVar(final String pageVar) {
-		this.pageVar = pageVar;
-	}
+        return (int) Math.ceil(listSize / getPageSize());
+    }
 
-	public String getClientPageVar() {
-		final String tableId = getDataTable().getId();
-		return tableId + "." + getPageVar();
-	}
+    public void setPageVar(final String pageVar) {
+        this.pageVar = pageVar;
+    }
 
-	public String getPageVar() {
-		return pageVar;
-	}
+    public String getClientPageVar() {
+        final String tableId = getDataTable().getId();
+        return tableId + "." + getPageVar();
+    }
 
-	public int getItemsPerPage() {
-		return getDataTable().getPageable().getPageSize();
-	}
+    public String getPageVar() {
+        return pageVar;
+    }
 
-	public void setItemsPerPage(final int itemsPerPage) {
-		this.itemsPerPage = itemsPerPage;
-	}
+    public String getListCssClass() {
+        return listCssClass;
+    }
 
-	public String getListCssClass() {
-		return listCssClass;
-	}
+    public void setListCssClass(final String listCssClass) {
+        this.listCssClass = listCssClass;
+    }
 
-	public void setListCssClass(final String listCssClass) {
-		this.listCssClass = listCssClass;
-	}
+    /**
+     * @return the itemCssClass
+     */
+    public String getItemCssClass() {
+        return itemCssClass;
+    }
 
-	/**
-	 * @return the itemCssClass
-	 */
-	public String getItemCssClass() {
-		return itemCssClass;
-	}
+    public String getCssClass() {
+        return cssClass;
+    }
 
-	public String getCssClass() {
-		return cssClass;
-	}
+    public void setCssClass(final String cssClass) {
+        this.cssClass = cssClass;
+    }
 
-	public void setCssClass(final String cssClass) {
-		this.cssClass = cssClass;
-	}
+    public String getPrevPageLabel() {
+        return prevPageLabel;
+    }
 
-	public String getPrevPageLabel() {
-		return prevPageLabel;
-	}
+    public void setPrevPageLabel(final String prevPageLabel) {
+        this.prevPageLabel = prevPageLabel;
+    }
 
-	public void setPrevPageLabel(final String prevPageLabel) {
-		this.prevPageLabel = prevPageLabel;
-	}
+    public String getNextPageLabel() {
+        return nextPageLabel;
+    }
 
-	public String getNextPageLabel() {
-		return nextPageLabel;
-	}
+    public void setNextPageLabel(final String nextPageLabel) {
+        this.nextPageLabel = nextPageLabel;
+    }
 
-	public void setNextPageLabel(final String nextPageLabel) {
-		this.nextPageLabel = nextPageLabel;
-	}
+    /**
+     * @return the useAjax
+     */
+    public boolean isUseAjax() {
+        return useAjax;
+    }
+
+    /**
+     * @param useAjax
+     *            the useAjax to set
+     */
+    public void setUseAjax(final boolean useAjax) {
+        this.useAjax = useAjax;
+    }
+
+    /**
+     * @return the pageSize
+     */
+    @Override
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    /**
+     * @param pageSize
+     *            the pageSize to set
+     */
+    public void setPageSize(final int pageSize) {
+        this.pageSize = pageSize;
+    }
 
 }

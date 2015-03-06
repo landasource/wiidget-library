@@ -8,47 +8,56 @@ import com.landasource.wiidget.library.html.table.Table;
  */
 public class PageableDataTable extends Table {
 
-	private Pageable<?> pageable;
+    private Pageable<?> pageable;
 
-	@Override
-	public void init() {
-		super.init();
+    @Override
+    public void init() {
+        super.init();
 
-		if (getValue() instanceof Pageable == false) {
-			throw new WiidgetException("Value must be pageable");
-		}
+        if (getValue() instanceof Pageable == false) {
+            throw new WiidgetException("Value must be pageable");
+        }
 
-		this.pageable = (Pageable<?>) super.getValue();
-	}
+        this.pageable = (Pageable<?>) super.getValue();
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		setValue(pageable.getPage(getCurrentPage()));
+        setValue(pageable.getPage(getCurrentPage(), getPageSize()));
 
-		super.run();
-	}
+        super.run();
+    }
 
-	public int getDataSize() {
-		return pageable.size();
-	}
+    public int getDataSize() {
+        return pageable.size();
+    }
 
-	protected int getCurrentPage() {
+    protected int getCurrentPage() {
 
-		final Paginator paginator = getPaginator();
+        final Paginator paginator = getPaginator();
 
-		if (null == paginator) {
-			return 1;
-		}
-		return paginator.getCurrentPage();
-	}
+        if (null == paginator) {
+            return 1;
+        }
+        return paginator.getCurrentPage();
+    }
 
-	private Paginator getPaginator() {
-		return getChildRecursive(Paginator.class);
-	}
+    private Paginator getPaginator() {
+        return getChildRecursive(Paginator.class);
+    }
 
-	public Pageable<?> getPageable() {
-		return pageable;
-	}
+    public Pageable<?> getPageable() {
+        return pageable;
+    }
+
+    /**
+     * @return the pageSize
+     */
+    public int getPageSize() {
+        final Paginator paginator = getChildRecursive(Paginator.class);
+
+        return null == paginator ? Paginator.DEFAULT_PAGE_SIZE : paginator.getPageSize();
+    }
 
 }

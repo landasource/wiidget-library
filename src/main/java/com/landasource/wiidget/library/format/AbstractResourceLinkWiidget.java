@@ -34,7 +34,7 @@ public abstract class AbstractResourceLinkWiidget extends Wiidget implements Res
 	public void run() {
 		super.run();
 
-		getWiidgetFactory().addResourceLink(this);
+		getEngine().addResourceLink(this);
 	}
 
 	public String getUrl() {
