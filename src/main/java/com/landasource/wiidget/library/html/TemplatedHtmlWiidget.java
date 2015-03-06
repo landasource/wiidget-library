@@ -84,10 +84,13 @@ public abstract class TemplatedHtmlWiidget extends BaseTagWiidget {
      */
     protected String replacePlaceholders(final String content, final DataMap data) {
 
+        // set parts
+        // TODO restore context
+        getEngine().getContext().setAll(data);
+
         // final DataMap mergedContext = new
         // DataMap(getEngine().getContext().getAll());
         // mergedContext.setAll(data);
-        //
         // final StringTemplate stringTemplate = new StringTemplate(content,
         // this.getRemovePlaceholders());
         // return stringTemplate.render(mergedContext);
